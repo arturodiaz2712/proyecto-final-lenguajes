@@ -1,5 +1,12 @@
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.SwingUtilities;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -42,6 +49,7 @@ public class carrusel extends javax.swing.JFrame {
         jLabel2.setText("jLabel2");
 
         jTextArea1.setColumns(20);
+        jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
@@ -52,25 +60,26 @@ public class carrusel extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(73, 73, 73)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(97, 97, 97)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(97, 97, 97)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(110, Short.MAX_VALUE))
+                        .addGap(296, 296, 296)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(84, 84, 84)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 429, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(jLabel1)
-                .addGap(42, 42, 42)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(29, 29, 29)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32))
         );
 
         pack();
@@ -78,11 +87,10 @@ public class carrusel extends javax.swing.JFrame {
 
     /**
      * @param args the command line arguments
-     */galeria ga=new galeria();
+     */
     
      public static void main(String args[]) {
-        metodo m=new metodo ();
-        m.run();
+        
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -108,11 +116,27 @@ public class carrusel extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+        /*java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new carrusel().setVisible(true);
+                carrusel c=new carrusel();
+                c.setVisible(true);
+                metodo m=new metodo (c);
+                m.run();
+            }
+                
+        });*/
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                carrusel c=new carrusel();
+                c.setVisible(true);
+                metodo t=new metodo(c);
+                t.start();
+                //metodo m=new metodo (c);
+                //m.run();
             }
         });
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -122,13 +146,32 @@ public class carrusel extends javax.swing.JFrame {
     private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
   
-    public  static void hola() {
-     System.out.println("quibo");
+    public void hola() {
+     System.out.println("Holaaaaa");
+     int con=g.imagenes.size();
+     imagencita actual=g.imagenes.get(cnt);
+     jLabel1.setText(actual.getTitulo());
+     BufferedImage im=null;
+     try {
+        im=ImageIO.read(new File(actual.getUrl()));
+     } catch (IOException ex) {
+         Logger.getLogger(carrusel.class.getName()).log(Level.SEVERE, null, ex);
+     }
+     ImageIcon ii=new ImageIcon(im);
+     jLabel2.setIcon(ii);
+     jTextArea1.setText(actual.getDescripcion());
+     cnt=(cnt+1)%con;
+     
+     validate();
+     
     }
 
 public void imagenes()
-{  ImageIcon ii=new ImageIcon("/folderalpes");
-    jLabel2.setIcon(ii);
+{  ImageIcon ii=new ImageIcon("/folder/alpes.png");
+   jLabel2.setIcon(ii);
 }
 
+galeria g=new galeria();
+int cnt=0;
 }
+
